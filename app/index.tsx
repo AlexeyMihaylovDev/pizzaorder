@@ -84,8 +84,10 @@ export default function HomeScreen() {
     if (selectedCategory !== 'all') {
       if (selectedCategory === 'salads') {
         filtered = filtered.filter((product) => product.type === 'side');
-      } else {
-        filtered = filtered.filter((product) => product.type === selectedCategory);
+      } else if (selectedCategory === 'pizzas') {
+        filtered = filtered.filter((product) => product.type === 'pizza');
+      } else if (selectedCategory === 'pastas') {
+        filtered = filtered.filter((product) => product.type === 'pasta');
       }
     }
 
@@ -121,16 +123,15 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <Appbar.Header style={styles.header} elevation={2}>
-        {/* Кнопка меню справа (RTL) */}
+      <Appbar.Header style={styles.header}>
+        {/* Действия слева (RTL) - аккаунт/админ */}
         <View style={styles.rightSection}>
-          <IconButton
-            icon="menu"
-            size={28}
-            iconColor="#fff"
-            onPress={() => setMenuVisible(true)}
-            style={styles.menuButton}
-          />
+          {user?.role === 'admin' && (
+            <Appbar.Action icon="shield-account" onPress={handleAdminPress} />
+          )}
+          {!isAuthenticated && (
+            <Appbar.Action icon="account-circle" onPress={handleLoginPress} />
+          )}
         </View>
         
         {/* Заголовок по центру */}
@@ -149,14 +150,15 @@ export default function HomeScreen() {
           </RNAnimated.View>
         </View>
         
-        {/* Действия слева (RTL) */}
+        {/* Кнопка меню справа (RTL) */}
         <View style={styles.leftSection}>
-          {user?.role === 'admin' && (
-            <Appbar.Action icon="shield-account" onPress={handleAdminPress} />
-          )}
-          {!isAuthenticated && (
-            <Appbar.Action icon="account-circle" onPress={handleLoginPress} />
-          )}
+          <IconButton
+            icon="menu"
+            size={28}
+            iconColor="#fff"
+            onPress={() => setMenuVisible(true)}
+            style={styles.menuButton}
+          />
         </View>
       </Appbar.Header>
 
@@ -273,13 +275,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightSection: {
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
     minWidth: 60,
   },
   leftSection: {
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     minWidth: 60,
