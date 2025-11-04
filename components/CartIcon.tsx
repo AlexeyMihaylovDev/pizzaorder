@@ -15,26 +15,22 @@ export const CartIcon: React.FC = () => {
   const { totalItems } = useCart();
   const router = useRouter();
   
-  // Все хуки должны вызываться всегда, до любых условных return
   const scale = useSharedValue(1);
   const rotation = useSharedValue(0);
   const badgeScale = useSharedValue(totalItems > 0 ? 1 : 0);
 
   useEffect(() => {
     if (totalItems > 0) {
-      // Анимация появления бейджа
       badgeScale.value = withSpring(1, {
         damping: 10,
         stiffness: 200,
       });
       
-      // Анимация тряски корзины
       scale.value = withSequence(
         withTiming(1.2, { duration: 150 }),
         withSpring(1, { damping: 10, stiffness: 200 })
       );
       
-      // Анимация вращения
       rotation.value = withSequence(
         withTiming(15, { duration: 100 }),
         withTiming(-15, { duration: 100 }),
@@ -46,7 +42,6 @@ export const CartIcon: React.FC = () => {
   }, [totalItems]);
 
   const handlePress = () => {
-    // Анимация нажатия
     scale.value = withSequence(
       withTiming(0.9, { duration: 100 }),
       withSpring(1, { damping: 10, stiffness: 200 })
@@ -84,7 +79,6 @@ export const CartIcon: React.FC = () => {
               {totalItems > 99 ? '99+' : totalItems}
             </Badge>
           </Animated.View>
-          {/* Показываем количество товаров под иконкой */}
           <View style={styles.countContainer}>
             <Text style={styles.countText}>{totalItems}</Text>
           </View>
@@ -108,7 +102,7 @@ const styles = StyleSheet.create({
   badgeContainer: {
     position: 'absolute',
     top: 8,
-    right: 8,
+    left: 8, // RTL: бейдж слева
     zIndex: 10,
   },
   badge: {

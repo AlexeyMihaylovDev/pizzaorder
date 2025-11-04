@@ -1,29 +1,32 @@
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { Card, Title, Paragraph, Button, Snackbar, IconButton } from 'react-native-paper';
-import { Pizza } from '../types';
+import { View, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Card, Title, Paragraph, Button, Snackbar } from 'react-native-paper';
+import { Product } from '../types';
 import { useRouter } from 'expo-router';
 import { useCart } from '../contexts/CartContext';
 import { he } from '../i18n/he';
 
 const t = he;
 
-interface PizzaCardProps {
-  pizza: Pizza;
+interface ProductCardProps {
+  pizza: Product;
 }
 
-export const PizzaCard: React.FC<PizzaCardProps> = ({ pizza }) => {
+export const PizzaCard: React.FC<ProductCardProps> = ({ pizza }) => {
   const router = useRouter();
   const { addToCart } = useCart();
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handleCardPress = () => {
-    router.push(`/pizza/customize?pizzaId=${pizza.id}`);
+    if (pizza.type === 'pizza') {
+      router.push(`/pizza/customize?pizzaId=${pizza.id}`);
+    } else {
+      handleQuickAdd();
+    }
   };
 
   const handleQuickAdd = () => {
-    // Анимация нажатия
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 0.95,
@@ -37,16 +40,15 @@ export const PizzaCard: React.FC<PizzaCardProps> = ({ pizza }) => {
       }),
     ]).start();
 
-    const defaultSize = 'medium';
-    const defaultPrice = pizza.prices[defaultSize];
+    const defaultSize = pizza.type === 'pizza' ? 'medium' : undefined;
 
     addToCart({
       productId: pizza.id,
-      productType: 'pizza',
+      productType: pizza.type,
       productName: pizza.name,
       productNameHe: pizza.nameHe,
       size: defaultSize,
-      price: defaultPrice,
+      price: pizza.price,
       toppings: [],
       imageUrl: pizza.imageUrl,
       quantity: 1,
@@ -69,8 +71,10 @@ export const PizzaCard: React.FC<PizzaCardProps> = ({ pizza }) => {
               <View style={styles.footer}>
                 <View>
                   <Paragraph style={styles.priceLabel}>{t.pizza.price}:</Paragraph>
-                  <Title style={styles.price}>{pizza.prices.medium} ₪</Title>
-                  <Paragraph style={styles.sizeLabel}>{t.pizza.size.medium}</Paragraph>
+                  <Title style={styles.price}>{pizza.price} ₪</Title>
+                  {pizza.type === 'pizza' && (
+                    <Paragraph style={styles.sizeLabel}>{t.pizza.size.medium}</Paragraph>
+                  )}
                 </View>
               </View>
             </Card.Content>
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 16,
     overflow: 'hidden',
-    direction: 'rtl',
+    direction: 'rtl', // RTL направление
     backgroundColor: '#fff',
   },
   image: {
@@ -136,8 +140,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 12,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: 'row-reverse', // RTL
+    justifyContent: 'flex-start',
   },
   priceLabel: {
     fontSize: 12,

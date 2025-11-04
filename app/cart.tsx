@@ -3,15 +3,13 @@ import {
   View,
   StyleSheet,
   FlatList,
-  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appbar, Title, Button, Card, Paragraph, Divider, FAB } from 'react-native-paper';
+import { Appbar, Title, Button, Card, Paragraph, Divider } from 'react-native-paper';
 import { CartItem as CartItemComponent } from '../components/CartItem';
 import { useCart } from '../contexts/CartContext';
 import { useRouter } from 'expo-router';
 import { he } from '../i18n/he';
-import { CartIcon } from '../components/CartIcon';
 
 const t = he;
 
@@ -36,7 +34,7 @@ export default function CartScreen() {
   if (items.length === 0) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <Appbar.Header>
+        <Appbar.Header style={styles.header}>
           <Appbar.BackAction onPress={handleBack} />
           <Appbar.Content title={t.cart.title} titleStyle={styles.headerTitle} />
         </Appbar.Header>
@@ -52,7 +50,7 @@ export default function CartScreen() {
             mode="contained"
             onPress={handleBack}
             style={styles.button}
-            icon="arrow-left"
+            icon="arrow-forward" // RTL: стрелка вправо
           >
             {t.cart.goToMenu}
           </Button>
@@ -63,7 +61,7 @@ export default function CartScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <Appbar.Header>
+      <Appbar.Header style={styles.header}>
         <Appbar.BackAction onPress={handleBack} />
         <Appbar.Content 
           title={`${t.cart.title} (${totalItems} ${t.cart.totalItems})`} 
@@ -116,6 +114,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+    direction: 'rtl', // RTL
+  },
+  header: {
+    backgroundColor: '#e74c3c',
   },
   list: {
     padding: 8,
@@ -125,12 +127,13 @@ const styles = StyleSheet.create({
     margin: 8,
     marginTop: 16,
     elevation: 4,
+    direction: 'rtl', // RTL
   },
   summaryContainer: {
     marginBottom: 16,
   },
   summaryRow: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
@@ -149,7 +152,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   totalContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     alignItems: 'center',
   },

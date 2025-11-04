@@ -17,7 +17,6 @@ export const CartFloatingButton: React.FC = () => {
   const { totalItems, totalPrice } = useCart();
   const router = useRouter();
   
-  // Хуки должны вызываться всегда, до любых условных return
   const scale = useSharedValue(1);
   const badgeScale = useSharedValue(totalItems > 0 ? 1 : 0);
 
@@ -27,7 +26,6 @@ export const CartFloatingButton: React.FC = () => {
         damping: 10,
         stiffness: 200,
       });
-      // Пульсация кнопки
       scale.value = withSequence(
         withTiming(1.1, { duration: 200 }),
         withSpring(1, { damping: 10, stiffness: 200 })
@@ -55,7 +53,6 @@ export const CartFloatingButton: React.FC = () => {
     opacity: badgeScale.value,
   }));
 
-  // Условный рендеринг после всех хуков
   if (totalItems === 0) {
     return null;
   }
@@ -84,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 20,
-    right: 20,
+    left: 20, // RTL: кнопка слева
     zIndex: 1000,
   },
   fab: {
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
   badgeContainer: {
     position: 'absolute',
     top: -6,
-    right: -6,
+    left: -6, // RTL: бейдж слева
     zIndex: 1001,
   },
   badge: {

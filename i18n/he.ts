@@ -27,6 +27,15 @@ export const he = {
     admin: 'מנהל',
   },
 
+  // Меню
+  menu: {
+    title: 'תפריט',
+    all: 'הכל',
+    pizzas: 'פיצות',
+    pastas: 'פסטות',
+    salads: 'סלטים',
+  },
+
   // Главная
   home: {
     title: 'פיצרייה',
@@ -137,6 +146,7 @@ export const he = {
 
     // Контакты
     contact: {
+      title: 'פרטי קשר',
       name: 'שם מלא',
       namePlaceholder: 'הכנס שם מלא',
       phone: 'טלפון',
@@ -160,6 +170,7 @@ export const he = {
     email: 'אימייל',
     password: 'סיסמה',
     name: 'שם',
+    nameRequired: 'אנא הכנס שם',
     alreadyHaveAccount: 'כבר יש לך חשבון?',
     dontHaveAccount: 'אין לך חשבון?',
     loginSuccess: 'התחברת בהצלחה',

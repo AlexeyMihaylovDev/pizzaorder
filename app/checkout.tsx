@@ -4,6 +4,8 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -23,10 +25,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { apiService } from '../services/api';
 import { he } from '../i18n/he';
+import { CartItem, PaymentMethod } from '../types';
 
 const t = he;
-
-type PaymentMethod = 'cash' | 'card' | 'online';
 
 export default function CheckoutScreen() {
   const { items, totalPrice, clearCart } = useCart();
@@ -36,12 +37,10 @@ export default function CheckoutScreen() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Контактная информация
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState(user?.email || '');
 
-  // Адрес доставки
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('תל אביב');
   const [zipCode, setZipCode] = useState('');
@@ -50,7 +49,6 @@ export default function CheckoutScreen() {
   const [entrance, setEntrance] = useState('');
   const [notes, setNotes] = useState('');
 
-  // Способ оплаты
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
@@ -63,19 +61,18 @@ export default function CheckoutScreen() {
         Alert.alert(t.common.error, t.messages.fillAllFields);
         return;
       }
-      setStep(2);
     } else if (step === 2) {
       if (!street.trim() || !city.trim() || !zipCode.trim()) {
         Alert.alert(t.common.error, t.messages.fillAllFields);
         return;
       }
-      setStep(3);
     }
+    setStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
     if (step > 1) {
-      setStep(step - 1);
+      setStep((prev) => prev - 1);
     } else {
       router.back();
     }
@@ -139,14 +136,15 @@ export default function CheckoutScreen() {
   const renderStep1 = () => (
     <Card style={styles.card}>
       <Card.Content>
-        <Title style={styles.sectionTitle}>{t.checkout.contact.name}</Title>
+        <Title style={styles.sectionTitle}>{t.checkout.contact.title}</Title>
         <TextInput
           label={t.checkout.contact.name}
           value={name}
           onChangeText={setName}
           mode="outlined"
           style={styles.input}
-          textContentType="name"
+          placeholder={t.checkout.contact.namePlaceholder}
+          textAlign="right"
         />
         <TextInput
           label={t.checkout.contact.phone}
@@ -156,6 +154,7 @@ export default function CheckoutScreen() {
           keyboardType="phone-pad"
           style={styles.input}
           placeholder={t.checkout.contact.phonePlaceholder}
+          textAlign="right"
         />
         <TextInput
           label={t.checkout.contact.email}
@@ -166,6 +165,7 @@ export default function CheckoutScreen() {
           autoCapitalize="none"
           style={styles.input}
           placeholder={t.checkout.contact.emailPlaceholder}
+          textAlign="right"
         />
       </Card.Content>
     </Card>
@@ -174,7 +174,7 @@ export default function CheckoutScreen() {
   const renderStep2 = () => (
     <Card style={styles.card}>
       <Card.Content>
-        <Title style={styles.sectionTitle}>{t.checkout.deliveryAddress}</Title>
+        <Title style={styles.sectionTitle}>{t.checkout.address.title}</Title>
         <TextInput
           label={t.checkout.address.street}
           value={street}
@@ -182,6 +182,7 @@ export default function CheckoutScreen() {
           mode="outlined"
           style={styles.input}
           placeholder={t.checkout.address.streetPlaceholder}
+          textAlign="right"
         />
         <TextInput
           label={t.checkout.address.city}
@@ -190,6 +191,7 @@ export default function CheckoutScreen() {
           mode="outlined"
           style={styles.input}
           placeholder={t.checkout.address.cityPlaceholder}
+          textAlign="right"
         />
         <TextInput
           label={t.checkout.address.zipCode}
@@ -199,6 +201,7 @@ export default function CheckoutScreen() {
           keyboardType="numeric"
           style={styles.input}
           placeholder={t.checkout.address.zipCodePlaceholder}
+          textAlign="right"
         />
         <View style={styles.row}>
           <TextInput
@@ -208,6 +211,7 @@ export default function CheckoutScreen() {
             mode="outlined"
             keyboardType="numeric"
             style={[styles.input, styles.halfInput]}
+            textAlign="right"
           />
           <TextInput
             label={t.checkout.address.apartment}
@@ -215,6 +219,7 @@ export default function CheckoutScreen() {
             onChangeText={setApartment}
             mode="outlined"
             style={[styles.input, styles.halfInput]}
+            textAlign="right"
           />
         </View>
         <TextInput
@@ -223,6 +228,7 @@ export default function CheckoutScreen() {
           onChangeText={setEntrance}
           mode="outlined"
           style={styles.input}
+          textAlign="right"
         />
         <TextInput
           label={t.checkout.address.notes}
@@ -233,6 +239,7 @@ export default function CheckoutScreen() {
           numberOfLines={3}
           style={styles.input}
           placeholder={t.checkout.address.notesPlaceholder}
+          textAlign="right"
         />
       </Card.Content>
     </Card>
@@ -241,10 +248,9 @@ export default function CheckoutScreen() {
   const renderStep3 = () => (
     <Card style={styles.card}>
       <Card.Content>
-        <Title style={styles.sectionTitle}>{t.checkout.paymentMethod}</Title>
-        
+        <Title style={styles.sectionTitle}>{t.checkout.payment.title}</Title>
         <RadioButton.Group
-          onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+          onValueChange={(newValue: PaymentMethod) => setPaymentMethod(newValue)}
           value={paymentMethod}
         >
           <View style={styles.radioOption}>
@@ -272,6 +278,7 @@ export default function CheckoutScreen() {
               keyboardType="numeric"
               style={styles.input}
               maxLength={16}
+              textAlign="right"
             />
             <View style={styles.row}>
               <TextInput
@@ -282,6 +289,7 @@ export default function CheckoutScreen() {
                 style={[styles.input, styles.halfInput]}
                 placeholder="MM/YY"
                 maxLength={5}
+                textAlign="right"
               />
               <TextInput
                 label={t.checkout.payment.cardCvv}
@@ -291,7 +299,7 @@ export default function CheckoutScreen() {
                 keyboardType="numeric"
                 style={[styles.input, styles.halfInput]}
                 maxLength={3}
-                secureTextEntry
+                textAlign="right"
               />
             </View>
             <TextInput
@@ -300,14 +308,9 @@ export default function CheckoutScreen() {
               onChangeText={setCardHolder}
               mode="outlined"
               style={styles.input}
+              textAlign="right"
             />
           </>
-        )}
-
-        {paymentMethod === 'online' && (
-          <Paragraph style={styles.infoText}>
-            {t.checkout.payment.online}: תשלום מקוון יבוצע דרך מערכת תשלומים מאובטחת
-          </Paragraph>
         )}
       </Card.Content>
     </Card>
@@ -315,23 +318,22 @@ export default function CheckoutScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <Appbar.Header>
+      <Appbar.Header style={styles.header}>
         <Appbar.BackAction onPress={handleBack} />
         <Appbar.Content title={t.checkout.title} titleStyle={styles.headerTitle} />
       </Appbar.Header>
 
-      <View style={styles.stepsContainer}>
-        <View style={[styles.step, step >= 1 && styles.stepActive]}>
-          <Paragraph style={styles.stepText}>1</Paragraph>
-        </View>
-        <View style={[styles.stepLine, step >= 2 && styles.stepLineActive]} />
-        <View style={[styles.step, step >= 2 && styles.stepActive]}>
-          <Paragraph style={styles.stepText}>2</Paragraph>
-        </View>
-        <View style={[styles.stepLine, step >= 3 && styles.stepLineActive]} />
-        <View style={[styles.step, step >= 3 && styles.stepActive]}>
-          <Paragraph style={styles.stepText}>3</Paragraph>
-        </View>
+      <View style={styles.progressBarContainer}>
+        <SegmentedButtons
+          value={String(step)}
+          onValueChange={(value) => setStep(Number(value))}
+          buttons={[
+            { value: '1', label: t.checkout.step1 },
+            { value: '2', label: t.checkout.step2 },
+            { value: '3', label: t.checkout.step3 },
+          ]}
+          style={styles.segmentedButtons}
+        />
       </View>
 
       <ScrollView style={styles.content}>
@@ -348,6 +350,7 @@ export default function CheckoutScreen() {
                     <Paragraph style={styles.orderItemName}>
                       {item.productNameHe}
                       {item.size && ` (${item.size})`}
+                      {item.toppings && item.toppings.length > 0 && ` + ${item.toppings.map(t => t.name).join(', ')}`}
                     </Paragraph>
                     <Paragraph style={styles.orderItemPrice}>
                       {item.quantity} × {item.price} ₪ = {item.price * item.quantity} ₪
@@ -366,32 +369,16 @@ export default function CheckoutScreen() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <View style={styles.footerButtons}>
-          {step < 3 ? (
-            <Button
-              mode="contained"
-              onPress={handleNext}
-              style={styles.nextButton}
-              contentStyle={styles.buttonContent}
-            >
-              {t.common.next}
-            </Button>
-          ) : (
-            <Button
-              mode="contained"
-              onPress={handleSubmit}
-              style={styles.submitButton}
-              contentStyle={styles.buttonContent}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                t.checkout.placeOrder
-              )}
-            </Button>
-          )}
-        </View>
+        <Button
+          mode="contained"
+          onPress={step < 3 ? handleNext : handleSubmit}
+          style={styles.submitButton}
+          contentStyle={styles.submitButtonContent}
+          disabled={loading || items.length === 0}
+          icon={step < 3 ? "arrow-forward" : "check"}
+        >
+          {loading ? <ActivityIndicator color="#fff" /> : (step < 3 ? t.common.next : t.checkout.placeOrder)}
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -401,36 +388,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+    direction: 'rtl', // RTL
   },
-  stepsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
+  header: {
+    backgroundColor: '#e74c3c',
+  },
+  headerTitle: {
+    textAlign: 'right',
+  },
+  progressBarContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 12,
     backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  step: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#e0e0e0',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  stepActive: {
-    backgroundColor: '#4caf50',
-  },
-  stepText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  stepLine: {
-    flex: 1,
-    height: 2,
-    backgroundColor: '#e0e0e0',
-    marginHorizontal: 8,
-  },
-  stepLineActive: {
-    backgroundColor: '#4caf50',
+  segmentedButtons: {
+    height: 40,
   },
   content: {
     flex: 1,
@@ -438,6 +412,7 @@ const styles = StyleSheet.create({
   card: {
     margin: 8,
     elevation: 2,
+    direction: 'rtl', // RTL
   },
   sectionTitle: {
     fontSize: 18,
@@ -447,49 +422,50 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
-    textAlign: 'right',
   },
   row: {
-    flexDirection: 'row',
-    gap: 12,
+    flexDirection: 'row-reverse', // RTL
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
   halfInput: {
     flex: 1,
+    marginHorizontal: 4,
   },
   radioOption: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     alignItems: 'center',
-    marginVertical: 8,
+    justifyContent: 'flex-start',
+    marginBottom: 8,
   },
   radioLabel: {
-    marginLeft: 8,
+    fontSize: 16,
     textAlign: 'right',
   },
   divider: {
-    marginVertical: 12,
-  },
-  infoText: {
-    marginTop: 12,
-    color: '#666',
-    textAlign: 'right',
+    marginVertical: 16,
   },
   orderItem: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     marginBottom: 8,
   },
   orderItemName: {
     flex: 1,
     textAlign: 'right',
+    marginLeft: 8,
   },
   orderItemPrice: {
     textAlign: 'left',
   },
   totalContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
   },
   totalLabel: {
     fontSize: 20,
@@ -507,23 +483,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
     padding: 16,
-  },
-  footerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  nextButton: {
-    flex: 1,
-    borderRadius: 8,
+    elevation: 8,
   },
   submitButton: {
-    flex: 1,
     borderRadius: 8,
   },
-  buttonContent: {
+  submitButtonContent: {
     paddingVertical: 8,
-  },
-  headerTitle: {
-    textAlign: 'right',
   },
 });

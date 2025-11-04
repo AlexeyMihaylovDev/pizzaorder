@@ -19,6 +19,15 @@ import {
 } from 'react-native-paper';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'expo-router';
+import { he } from '../i18n/he';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
+
+const t = he;
 
 export default function LoginScreen() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -30,14 +39,27 @@ export default function LoginScreen() {
   const { login, register } = useAuth();
   const router = useRouter();
 
+  const fadeAnim = useSharedValue(0);
+  const slideAnim = useSharedValue(50);
+
+  React.useEffect(() => {
+    fadeAnim.value = withTiming(1, { duration: 500 });
+    slideAnim.value = withSpring(0, { damping: 15, stiffness: 150 });
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+    transform: [{ translateY: slideAnim.value }],
+  }));
+
   const handleSubmit = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Ошибка', 'Заполните все поля');
+      Alert.alert(t.common.error, t.messages.fillAllFields);
       return;
     }
 
     if (mode === 'register' && !name.trim()) {
-      Alert.alert('Ошибка', 'Введите имя');
+      Alert.alert(t.common.error, t.auth.nameRequired || 'אנא הכנס שם');
       return;
     }
 
@@ -51,8 +73,8 @@ export default function LoginScreen() {
       router.back();
     } catch (error: any) {
       Alert.alert(
-        'Ошибка',
-        error.response?.data?.message || 'Не удалось выполнить вход'
+        t.common.error,
+        error.response?.data?.message || t.messages.errorOccurred
       );
     } finally {
       setLoading(false);
@@ -65,9 +87,12 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <Appbar.Header>
+      <Appbar.Header style={styles.header}>
         <Appbar.BackAction onPress={handleBack} />
-        <Appbar.Content title={mode === 'login' ? 'Вход' : 'Регистрация'} />
+        <Appbar.Content 
+          title={mode === 'login' ? t.auth.login : t.auth.register}
+          titleStyle={styles.headerTitle}
+        />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -75,65 +100,73 @@ export default function LoginScreen() {
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.content}>
-          <Card style={styles.card}>
-            <Card.Content>
-              <SegmentedButtons
-                value={mode}
-                onValueChange={(value) => setMode(value as 'login' | 'register')}
-                buttons={[
-                  { value: 'login', label: 'Вход' },
-                  { value: 'register', label: 'Регистрация' },
-                ]}
-                style={styles.segmentedButtons}
-              />
-
-              {mode === 'register' && (
-                <TextInput
-                  label="Имя"
-                  value={name}
-                  onChangeText={setName}
-                  mode="outlined"
-                  style={styles.input}
-                  autoCapitalize="words"
+          <Animated.View style={animatedStyle}>
+            <Card style={styles.card}>
+              <Card.Content>
+                <Title style={styles.title}>{mode === 'login' ? t.auth.login : t.auth.register}</Title>
+                
+                <SegmentedButtons
+                  value={mode}
+                  onValueChange={(value) => setMode(value as 'login' | 'register')}
+                  buttons={[
+                    { value: 'login', label: t.auth.login },
+                    { value: 'register', label: t.auth.register },
+                  ]}
+                  style={styles.segmentedButtons}
                 />
-              )}
 
-              <TextInput
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                mode="outlined"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={styles.input}
-              />
-
-              <TextInput
-                label="Пароль"
-                value={password}
-                onChangeText={setPassword}
-                mode="outlined"
-                secureTextEntry
-                style={styles.input}
-              />
-
-              <Button
-                mode="contained"
-                onPress={handleSubmit}
-                style={styles.submitButton}
-                contentStyle={styles.submitButtonContent}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : mode === 'login' ? (
-                  'Войти'
-                ) : (
-                  'Зарегистрироваться'
+                {mode === 'register' && (
+                  <TextInput
+                    label={t.auth.name}
+                    value={name}
+                    onChangeText={setName}
+                    mode="outlined"
+                    style={styles.input}
+                    autoCapitalize="words"
+                    textAlign="right"
+                  />
                 )}
-              </Button>
-            </Card.Content>
-          </Card>
+
+                <TextInput
+                  label={t.auth.email}
+                  value={email}
+                  onChangeText={setEmail}
+                  mode="outlined"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={styles.input}
+                  textAlign="right"
+                />
+
+                <TextInput
+                  label={t.auth.password}
+                  value={password}
+                  onChangeText={setPassword}
+                  mode="outlined"
+                  secureTextEntry
+                  style={styles.input}
+                  textAlign="right"
+                />
+
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit}
+                  style={styles.submitButton}
+                  contentStyle={styles.submitButtonContent}
+                  disabled={loading}
+                  buttonColor="#e74c3c"
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : mode === 'login' ? (
+                    t.auth.login
+                  ) : (
+                    t.auth.register
+                  )}
+                </Button>
+              </Card.Content>
+            </Card>
+          </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -145,6 +178,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  header: {
+    backgroundColor: '#e74c3c',
+  },
+  headerTitle: {
+    color: '#fff',
+    textAlign: 'right',
+  },
   keyboardView: {
     flex: 1,
   },
@@ -155,6 +195,14 @@ const styles = StyleSheet.create({
   },
   card: {
     elevation: 4,
+    borderRadius: 16,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    textAlign: 'right',
+    color: '#333',
   },
   segmentedButtons: {
     marginBottom: 24,
@@ -170,4 +218,3 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 });
-

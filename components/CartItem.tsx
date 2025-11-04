@@ -163,22 +163,24 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderRadius: 12,
     overflow: 'hidden',
+    direction: 'rtl', // RTL
   },
   container: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     padding: 12,
   },
   image: {
     width: 100,
     height: 100,
     borderRadius: 8,
+    marginLeft: 12, // RTL: margin слева
   },
   content: {
     flex: 1,
-    marginLeft: 12,
+    marginRight: 12, // RTL: margin справа
   },
   headerRow: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 8,
@@ -216,9 +218,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   toppingsList: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     flexWrap: 'wrap',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     gap: 4,
   },
   toppingChip: {
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#e0e0e0',
   },
   priceRow: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     justifyContent: 'space-between',
     marginBottom: 4,
   },
@@ -253,8 +255,8 @@ const styles = StyleSheet.create({
   },
   finalTotalRow: {
     marginTop: 4,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: 'row-reverse', // RTL
+    justifyContent: 'flex-start',
   },
   finalTotal: {
     fontSize: 18,
@@ -263,13 +265,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   controls: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     alignItems: 'center',
     marginTop: 12,
     justifyContent: 'space-between',
   },
   quantityControls: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse', // RTL
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
     borderRadius: 20,
@@ -286,6 +288,6 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   editButton: {
-    marginLeft: 8,
+    marginRight: 8, // RTL: margin справа
   },
 });
