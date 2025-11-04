@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pizzaorder",
+    "name": "אסא פיצרייה",
     "slug": "pizzaorder",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,20 +11,42 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e74c3c"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pizzaorder.app"
     },
     "android": {
+      "package": "com.pizzaorder.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "pizzaorder"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.pizzaorder.app"
+      "allowBackup": true,
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -34,6 +56,12 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "91035ced-0a9e-498a-8594-8a22422a47cd"
+      }
+    }
   }
 }
