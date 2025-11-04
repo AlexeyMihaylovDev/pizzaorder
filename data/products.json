@@ -1,0 +1,249 @@
+{
+  "pizzas": [
+    {
+      "id": "pizza-1",
+      "name": "Margherita",
+      "nameHe": "מרגריטה",
+      "description": "Classic pizza with tomatoes, mozzarella and basil",
+      "descriptionHe": "פיצה קלאסית עם עגבניות, מוצרלה ובזיליקום",
+      "basePrice": 45,
+      "prices": {
+        "small": 35,
+        "medium": 45,
+        "large": 55,
+        "family": 65
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400",
+      "category": "Classic",
+      "ingredients": ["tomatoes", "mozzarella", "basil"],
+      "availableToppings": ["mozzarella", "parmesan", "olives", "tomatoes", "basil"]
+    },
+    {
+      "id": "pizza-2",
+      "name": "Pepperoni",
+      "nameHe": "פפרוני",
+      "description": "Spicy pizza with pepperoni and cheese",
+      "descriptionHe": "פיצה חריפה עם פפרוני וגבינה",
+      "basePrice": 55,
+      "prices": {
+        "small": 45,
+        "medium": 55,
+        "large": 65,
+        "family": 75
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400",
+      "category": "Spicy",
+      "ingredients": ["pepperoni", "mozzarella", "tomatoes"],
+      "availableToppings": ["pepperoni", "mozzarella", "onions", "peppers"]
+    },
+    {
+      "id": "pizza-3",
+      "name": "Hawaiian",
+      "nameHe": "הוואי",
+      "description": "Pizza with ham and pineapple",
+      "descriptionHe": "פיצה עם נקניק ואננס",
+      "basePrice": 60,
+      "prices": {
+        "small": 50,
+        "medium": 60,
+        "large": 70,
+        "family": 80
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400",
+      "category": "Exotic",
+      "ingredients": ["ham", "pineapple", "mozzarella"],
+      "availableToppings": ["ham", "pineapple", "bacon", "mozzarella"]
+    },
+    {
+      "id": "pizza-4",
+      "name": "Four Cheese",
+      "nameHe": "ארבעה גבינות",
+      "description": "Pizza with four types of cheese",
+      "descriptionHe": "פיצה עם ארבעה סוגי גבינה",
+      "basePrice": 65,
+      "prices": {
+        "small": 55,
+        "medium": 65,
+        "large": 75,
+        "family": 85
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=400",
+      "category": "Cheese",
+      "ingredients": ["mozzarella", "gorgonzola", "parmesan", "ricotta"],
+      "availableToppings": ["mozzarella", "cheddar", "parmesan", "gorgonzola", "ricotta"]
+    },
+    {
+      "id": "pizza-5",
+      "name": "Vegetarian",
+      "nameHe": "צמחונית",
+      "description": "Pizza with fresh vegetables",
+      "descriptionHe": "פיצה עם ירקות טריים",
+      "basePrice": 52,
+      "prices": {
+        "small": 42,
+        "medium": 52,
+        "large": 62,
+        "family": 72
+      },
+      "imageUrl": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400",
+      "category": "Vegetarian",
+      "ingredients": ["tomatoes", "peppers", "mushrooms", "olives", "onions"],
+      "availableToppings": ["tomatoes", "peppers", "mushrooms", "olives", "onions", "pineapple"]
+    }
+  ],
+  "pastas": [
+    {
+      "id": "pasta-1",
+      "name": "Spaghetti Carbonara",
+      "nameHe": "ספגטי קרבונרה",
+      "description": "Classic Italian pasta with bacon, eggs and cheese",
+      "descriptionHe": "פסטה איטלקית קלאסית עם בייקון, ביצים וגבינה",
+      "price": 42,
+      "imageUrl": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400",
+      "category": "Classic",
+      "ingredients": ["spaghetti", "bacon", "eggs", "parmesan", "black pepper"],
+      "size": "regular"
+    },
+    {
+      "id": "pasta-2",
+      "name": "Penne Arrabbiata",
+      "nameHe": "פנה ארביאטה",
+      "description": "Spicy pasta with tomatoes and chili",
+      "descriptionHe": "פסטה חריפה עם עגבניות וצ'ילי",
+      "price": 38,
+      "imageUrl": "https://images.unsplash.com/photo-1551462147-6e923f86a207?w=400",
+      "category": "Spicy",
+      "ingredients": ["penne", "tomatoes", "garlic", "chili", "basil"],
+      "size": "regular"
+    },
+    {
+      "id": "pasta-3",
+      "name": "Fettuccine Alfredo",
+      "nameHe": "פטוצ'יני אלפרדו",
+      "description": "Creamy pasta with parmesan and butter",
+      "descriptionHe": "פסטה קרמית עם פארמצ'ן וחמאה",
+      "price": 44,
+      "imageUrl": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400",
+      "category": "Creamy",
+      "ingredients": ["fettuccine", "cream", "parmesan", "butter", "garlic"],
+      "size": "regular"
+    },
+    {
+      "id": "pasta-4",
+      "name": "Lasagna",
+      "nameHe": "לזניה",
+      "description": "Layered pasta with meat sauce and cheese",
+      "descriptionHe": "פסטה בשכבות עם רוטב בשר וגבינה",
+      "price": 48,
+      "imageUrl": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=400",
+      "category": "Classic",
+      "ingredients": ["lasagna", "ground meat", "tomatoes", "mozzarella", "béchamel"],
+      "size": "regular"
+    }
+  ],
+  "drinks": [
+    {
+      "id": "drink-1",
+      "name": "Coca Cola",
+      "nameHe": "קוקה קולה",
+      "description": "Refreshing cola drink",
+      "descriptionHe": "משקה קולה מרענן",
+      "price": 8,
+      "imageUrl": "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400",
+      "category": "Soft Drinks",
+      "sizes": ["0.5L", "1L", "1.5L"],
+      "sizesPrices": {
+        "0.5L": 8,
+        "1L": 12,
+        "1.5L": 15
+      }
+    },
+    {
+      "id": "drink-2",
+      "name": "Orange Juice",
+      "nameHe": "מיץ תפוזים",
+      "description": "Fresh orange juice",
+      "descriptionHe": "מיץ תפוזים טרי",
+      "price": 10,
+      "imageUrl": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400",
+      "category": "Juices",
+      "sizes": ["0.3L", "0.5L"],
+      "sizesPrices": {
+        "0.3L": 10,
+        "0.5L": 15
+      }
+    },
+    {
+      "id": "drink-3",
+      "name": "Water",
+      "nameHe": "מים",
+      "description": "Mineral water",
+      "descriptionHe": "מי מינרלים",
+      "price": 5,
+      "imageUrl": "https://images.unsplash.com/photo-1548839140-bc5f38e2c832?w=400",
+      "category": "Water",
+      "sizes": ["0.5L", "1L"],
+      "sizesPrices": {
+        "0.5L": 5,
+        "1L": 8
+      }
+    },
+    {
+      "id": "drink-4",
+      "name": "Beer",
+      "nameHe": "בירה",
+      "description": "Local beer",
+      "descriptionHe": "בירה מקומית",
+      "price": 12,
+      "imageUrl": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400",
+      "category": "Alcohol",
+      "sizes": ["0.5L"],
+      "sizesPrices": {
+        "0.5L": 12
+      }
+    }
+  ],
+  "sides": [
+    {
+      "id": "side-1",
+      "name": "Garlic Bread",
+      "nameHe": "לחם שום",
+      "description": "Crispy bread with garlic and butter",
+      "descriptionHe": "לחם פריך עם שום וחמאה",
+      "price": 15,
+      "imageUrl": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400",
+      "category": "Bread"
+    },
+    {
+      "id": "side-2",
+      "name": "French Fries",
+      "nameHe": "צ'יפס",
+      "description": "Crispy golden fries",
+      "descriptionHe": "צ'יפס פריך זהוב",
+      "price": 18,
+      "imageUrl": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400",
+      "category": "Fries"
+    },
+    {
+      "id": "side-3",
+      "name": "Chicken Wings",
+      "nameHe": "כנפיים",
+      "description": "Spicy chicken wings",
+      "descriptionHe": "כנפיים חריפות",
+      "price": 28,
+      "imageUrl": "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400",
+      "category": "Chicken"
+    },
+    {
+      "id": "side-4",
+      "name": "Salad",
+      "nameHe": "סלט",
+      "description": "Fresh green salad",
+      "descriptionHe": "סלט ירוק טרי",
+      "price": 22,
+      "imageUrl": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400",
+      "category": "Salad"
+    }
+  ]
+}
+
